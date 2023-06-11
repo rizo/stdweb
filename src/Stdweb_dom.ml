@@ -227,16 +227,13 @@ end
 
 module Document = struct
   type t = Jx.t
-  type 'a listener = 'a Event.t -> unit
+
+  include (Node : module type of Node with type t := t)
 
   let this = Global.document
   let to_node this = this
   let get_cookies () = Jx.Obj.get Global.document "cookie" Jx.Decoder.string
   let set_cookies cookies = Jx.Obj.set this "cookie" Jx.Encoder.string cookies
-
-  let add_event_listener this event_name f =
-    Jx.Obj.call_js_unit this "addEventListener"
-      [| Jx.Encoder.string event_name; Jx.Encoder.fun1 f |]
 
   let get_element_by_id id =
     Jx.Decoder.nullable

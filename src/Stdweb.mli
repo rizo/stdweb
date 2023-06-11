@@ -322,6 +322,8 @@ module Dom : sig
   module Document : sig
     type t
 
+    include module type of Node with type t := t
+
     val this : t
     val to_node : t -> Node.t
     val get_cookies : unit -> string
